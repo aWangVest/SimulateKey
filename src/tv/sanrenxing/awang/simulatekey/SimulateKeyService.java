@@ -89,9 +89,14 @@ public class SimulateKeyService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		String action = intent.getAction();
 		Log.i(TAG, "onStartCommand()");
-		Log.i(TAG, "Action = " + action);
+		// 什么时候intent会为空呢？ //
+		if (intent != null) {
+			String action = intent.getAction();
+			Log.i(TAG, "Action = " + action);
+		} else {
+			Log.w(TAG, "Intent is null");
+		}
 		if (!isRuning) {
 			initFloatWindowV2();
 			isRuning = true;
