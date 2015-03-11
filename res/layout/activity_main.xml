@@ -16,7 +16,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:onClick="onClickQuit"
-        android:text="退出" />
+        android:text="@string/btn_zh_quit" />
 
     <Button
         android:id="@+id/btnTest"
@@ -26,7 +26,7 @@
         android:layout_alignRight="@+id/btnQuit"
         android:layout_below="@+id/btnQuit"
         android:onClick="onClickTest"
-        android:text="测试" />
+        android:text="@string/btn_zh_test" />
 
     <Button
         android:id="@+id/btnAddHeight"
@@ -36,7 +36,7 @@
         android:layout_alignRight="@+id/btnTest"
         android:layout_below="@+id/btnTest"
         android:onClick="onClickAddHeight"
-        android:text="按钮高度增加" />
+        android:text="@string/btn_zh_add_height" />
 
     <Button
         android:id="@+id/btnMinusHeight"
@@ -46,7 +46,7 @@
         android:layout_alignRight="@+id/btnAddHeight"
         android:layout_below="@+id/btnAddHeight"
         android:onClick="onClickMinusHeight"
-        android:text="按钮高度减小" />
+        android:text="@string/btn_zh_minus_height" />
 
     <Button
         android:id="@+id/btnSetButtonBg"
@@ -55,7 +55,7 @@
         android:layout_alignLeft="@+id/btnMinusHeight"
         android:layout_alignRight="@+id/btnMinusHeight"
         android:layout_below="@+id/btnMinusHeight"
-        android:text="设置按钮背景色" />
+        android:text="@string/btn_set_button_bg" />
 
     <Button
         android:id="@+id/btnSetTextColor"
@@ -64,6 +64,6 @@
         android:layout_alignLeft="@+id/btnSetButtonBg"
         android:layout_alignRight="@+id/btnSetButtonBg"
         android:layout_below="@+id/btnSetButtonBg"
-        android:text="设置文字颜色" />
+        android:text="@string/btn_set_text_color" />
 
 </RelativeLayout>

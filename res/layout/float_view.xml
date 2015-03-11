@@ -9,7 +9,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Move" />
+        android:text="@string/move" />
 
     <Button
         android:id="@+id/btnMenu"
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:tag="82"
-        android:text="Menu" />
+        android:text="@string/menu" />
 
     <Button
         android:id="@+id/btnHome"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:tag="3"
-        android:text="Home" />
+        android:text="@string/home" />
 
     <Button
         android:id="@+id/btnBack"
@@ -33,13 +33,13 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:tag="4"
-        android:text="Back" />
+        android:text="@string/back" />
 
     <Button
         android:id="@+id/btnQuit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Quit" />
+        android:text="@string/quit" />
 
 </LinearLayout>
