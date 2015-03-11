@@ -104,16 +104,15 @@ public class SimulateKeyService extends Service {
 		} else {
 			Log.w(TAG, "Intent is null");
 		}
-		if (!isFwShow) {
+
+		boolean hasExtra = intent.getBooleanExtra(KEY_HAS_EXTRA, false);
+		if (hasExtra) {
+			processExtra(intent.getExtras());
+		} else if (!isFwShow) {
 			initFloatWindow();
 			isFwShow = true;
 		} else {
-			boolean hasExtra = intent.getBooleanExtra(KEY_HAS_EXTRA, false);
-			if (hasExtra) {
-				processExtra(intent.getExtras());
-			} else {
-				Log.w(TAG, "isRuning");
-			}
+			Log.w(TAG, "isRuning");
 		}
 		return super.onStartCommand(intent, flags, startId);
 	}
@@ -160,7 +159,17 @@ public class SimulateKeyService extends Service {
 	 * 显示悬浮窗
 	 */
 	public void showFloatWindow() {
-		wm.addView(floatLayout, params);
+		Log.i(TAG, "showFloatWindow()");
+		// 如果不作处理,重复调用会导致IllegalStateException异常 //
+		if (isFwShow) {
+			return;
+		}
+		// 如果intent带参数的话，就不会直接调用initFloatWindow了，这里需要进行判断 //
+		if (wm == null) {
+			initFloatWindow();
+		} else {
+			wm.addView(floatLayout, params);
+		}
 		isFwShow = true;
 	}
 
@@ -168,6 +177,12 @@ public class SimulateKeyService extends Service {
 	 * 隐藏悬浮窗
 	 */
 	public void hiddenFloatWindow() {
+		Log.i(TAG, "hiddenFloatWindow()");
+		Log.d(TAG, "isFwShow - " + isFwShow);
+		// 这里也要处理,防止重复调用 //
+		if (isFwShow == false) {
+			return;
+		}
 		isFwShow = false;
 		wm.removeView(floatLayout);
 	}
