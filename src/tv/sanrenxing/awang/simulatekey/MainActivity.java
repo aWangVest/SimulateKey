@@ -1,9 +1,6 @@
 package tv.sanrenxing.awang.simulatekey;
 
-import com.tencent.bugly.crashreport.CrashReport;
-
-import tv.sanrenxing.awang.utils.ExecTask;
-import tv.sanrenxing.awang.utils.ExecTask.Callback2;
+import tv.sanrenxing.awang.utils.SimulateKeyUtils;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +13,7 @@ import android.view.View;
  */
 public class MainActivity extends Activity {
 
-	protected static final String TAG = "SimulateKey";
+	private static final String TAG = "SimulateKey";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,103 +22,74 @@ public class MainActivity extends Activity {
 		showFloatWindow();
 	}
 
+	/**
+	 * 显示悬浮窗
+	 */
 	protected void showFloatWindow() {
-		Intent intent = new Intent(
-				"tv.sanrenxing.awang.simulatekey.SimulateKeyService");
+		Intent intent = new Intent(SimulateKeyService.NAME);
+		// 第一次启动的时候，可以不带参数 //
+		intent.putExtra(SimulateKeyService.KEY_HAS_EXTRA, true);
+		intent.putExtra(SimulateKeyService.KEY_DO_ACTION,
+				SimulateKeyService.DO_ACTION_SHOWWINDOW);
 		startService(intent);
 	}
 
+	/**
+	 * 隐藏悬浮窗
+	 */
+	protected void hiddenFloatWindow() {
+		Intent intent = new Intent(SimulateKeyService.NAME);
+		intent.putExtra(SimulateKeyService.KEY_HAS_EXTRA, true);
+		intent.putExtra(SimulateKeyService.KEY_DO_ACTION,
+				SimulateKeyService.DO_ACTION_HIDDENWINDOW);
+		startService(intent);
+	}
+
+	/**
+	 * 退出应用(不会隐藏悬浮窗)
+	 * 
+	 * @param v
+	 */
 	public void onClickQuit(View v) {
 		Log.i(TAG, "onClickQuit()");
 		this.finish();
 	}
 
+	/**
+	 * 测试按钮，预留
+	 * 
+	 * @param v
+	 */
 	public void onClickTest(View v) {
 		Log.i(TAG, "onClickTest()");
-		CrashReport.testJavaCrash();
-		CrashReport.testNativeCrash();
+		SimulateKeyUtils.showMessage(getApplicationContext(), "暂未实现");
 	}
-	
+
+	/**
+	 * 悬浮窗按钮高度增加
+	 * 
+	 * @param v
+	 */
 	public void onClickAddHeight(View v) {
 		Intent intent = new Intent(
 				"tv.sanrenxing.awang.simulatekey.SimulateKeyService");
 		intent.putExtra(SimulateKeyService.KEY_HAS_EXTRA, true);
-		intent.putExtra(SimulateKeyService.KEY_DO_ACTION, SimulateKeyService.DO_ACTION_ADDHEIGHT);
+		intent.putExtra(SimulateKeyService.KEY_DO_ACTION,
+				SimulateKeyService.DO_ACTION_ADDHEIGHT);
 		startService(intent);
 	}
-	
+
+	/**
+	 * 悬浮窗按钮高度减小
+	 * 
+	 * @param v
+	 */
 	public void onClickMinusHeight(View v) {
 		Intent intent = new Intent(
 				"tv.sanrenxing.awang.simulatekey.SimulateKeyService");
 		intent.putExtra(SimulateKeyService.KEY_HAS_EXTRA, true);
-		intent.putExtra(SimulateKeyService.KEY_DO_ACTION, SimulateKeyService.DO_ACTION_MINUSHEIGHT);
+		intent.putExtra(SimulateKeyService.KEY_DO_ACTION,
+				SimulateKeyService.DO_ACTION_MINUSHEIGHT);
 		startService(intent);
-	}
-
-	protected void testInput() {
-		Log.i(TAG, "testInput()");
-		ExecTask task = new ExecTask("input", ExecTask.TAG_WITH_OUTPUT);
-		task.setCallback2(new Callback2() {
-			@Override
-			public void callback(String line) {
-				Log.d(TAG, line);
-			}
-		});
-		new Thread(task).start();
-	}
-
-	protected void testSuInput() {
-		Log.i(TAG, "testSuInput()");
-		ExecTask task = new ExecTask("su input keyevent 3",
-				ExecTask.TAG_WITH_OUTPUT);
-		task.setCallback2(new Callback2() {
-			@Override
-			public void callback(String line) {
-				Log.d(TAG, line);
-			}
-		});
-		new Thread(task).start();
-	}
-
-	protected void testInputKeyevent() {
-		Log.i(TAG, "testInputKeyevent()");
-		ExecTask task = new ExecTask("input keyevent 3",
-				ExecTask.TAG_WITH_OUTPUT);
-		task.setCallback2(new Callback2() {
-			@Override
-			public void callback(String line) {
-				Log.d(TAG, line);
-			}
-		});
-		new Thread(task).start();
-	}
-
-	protected void testLsDataData() {
-		Log.i(TAG, "testLsDataData()");
-		ExecTask task = new ExecTask("ls /data/data", ExecTask.TAG_WITH_OUTPUT
-				| ExecTask.TAG_RUNAS_ROOT);
-		task.setCallback2(new Callback2() {
-			@Override
-			public void callback(String line) {
-				Log.d(TAG, line);
-			}
-		});
-		new Thread(task).start();
-	}
-
-	/**
-	 * OK -> Good
-	 */
-	protected void testSuInputV2() {
-		Log.i(TAG, "testSuInputV2()");
-		ExecTask task = new ExecTask("input keyevent 3",
-				ExecTask.TAG_WITH_OUTPUT | ExecTask.TAG_RUNAS_ROOT);
-		task.setCallback2(new Callback2() {
-			@Override
-			public void callback(String line) {
-				Log.d(TAG, line);
-			}
-		});
-		new Thread(task).start();
 	}
 }

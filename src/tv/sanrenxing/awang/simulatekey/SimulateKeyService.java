@@ -28,13 +28,22 @@ public class SimulateKeyService extends Service {
 
 	private static final String TAG = "SimulateKey";
 
+	public static final String NAME = "tv.sanrenxing.awang.simulatekey.SimulateKeyService";
+
 	public static final String KEY_HAS_EXTRA = "hasExtra";
 	public static final String KEY_DO_ACTION = "doAction";
 
+	/*** 增加高度 */
 	public static final int DO_ACTION_ADDHEIGHT = 1;
+	/*** 减小高度 */
 	public static final int DO_ACTION_MINUSHEIGHT = 2;
+	/*** 显示悬浮窗 */
+	public static final int DO_ACTION_SHOWWINDOW = 3;
+	/*** 隐藏悬浮窗 */
+	public static final int DO_ACTION_HIDDENWINDOW = 4;
 
-	private boolean isRuning = false;
+	/*** 悬浮窗是否显示 */
+	private boolean isFwShow = false;
 
 	private WindowManager wm = null;
 	private LayoutParams params = null;
@@ -50,7 +59,7 @@ public class SimulateKeyService extends Service {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			/* 这样的话，只有在移动的时候才会更新位置，不会一点击就移动了[2014-9-13 16:57:34] */
+			// 这样的话，只有在移动的时候才会更新位置，不会一点击就移动了 //
 			if (event.getAction() != MotionEvent.ACTION_MOVE) {
 				return false;
 			}
@@ -65,10 +74,7 @@ public class SimulateKeyService extends Service {
 	private OnClickListener quitListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			isRuning = false;
-			wm.removeView(floatLayout);
-			SimulateKeyUtils.showMessage(getApplicationContext(), btnQuit.getText()
-					.toString());
+			hiddenFloatWindow();
 		}
 	};
 
@@ -86,7 +92,7 @@ public class SimulateKeyService extends Service {
 	public IBinder onBind(Intent intent) {
 		return null;
 	}
-
+	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.i(TAG, "onStartCommand()");
@@ -97,9 +103,9 @@ public class SimulateKeyService extends Service {
 		} else {
 			Log.w(TAG, "Intent is null");
 		}
-		if (!isRuning) {
-			initFloatWindowV2();
-			isRuning = true;
+		if (!isFwShow) {
+			initFloatWindow();
+			isFwShow = true;
 		} else {
 			boolean hasExtra = intent.getBooleanExtra(KEY_HAS_EXTRA, false);
 			if (hasExtra) {
@@ -111,8 +117,14 @@ public class SimulateKeyService extends Service {
 		return super.onStartCommand(intent, flags, startId);
 	}
 
+	/**
+	 * 处理Intent传来的参数，进行调整
+	 * 
+	 * @param extras
+	 */
 	protected void processExtra(Bundle extras) {
 		Log.i(TAG, "processExtra()");
+
 		int doAction = extras.getInt(KEY_DO_ACTION, 0);
 		switch (doAction) {
 		case DO_ACTION_ADDHEIGHT:
@@ -127,12 +139,51 @@ public class SimulateKeyService extends Service {
 				child.setHeight(child.getHeight() - 1);
 			}
 			break;
+		case DO_ACTION_SHOWWINDOW:
+			this.showFloatWindow();
+			break;
+		case DO_ACTION_HIDDENWINDOW:
+			this.hiddenFloatWindow();
+			break;
 		}
 	}
 
+	/**
+	 * 显示悬浮窗
+	 */
+	public void showFloatWindow() {
+		wm.addView(floatLayout, params);
+		isFwShow = true;
+	}
+
+	/**
+	 * 隐藏悬浮窗
+	 */
+	public void hiddenFloatWindow() {
+		isFwShow = false;
+		wm.removeView(floatLayout);
+	}
+
+	/**
+	 * 初始化并显示悬浮窗
+	 */
+	protected void initFloatWindow() {
+		this.initParams();
+		LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+		// 根Layout //
+		floatLayout = (LinearLayout) inflater
+				.inflate(R.layout.float_view, null);
+		this.initEvent();
+		this.initView();
+		wm.addView(floatLayout, params);
+	}
+
+	/**
+	 * 初始化悬浮窗参数
+	 */
 	protected void initParams() {
 		Log.i(TAG, "initParams()");
-		/* 这里注意需要getApplicationContext */
+		// 注意这里需要getApplicationContext //
 		wm = (WindowManager) getApplicationContext().getSystemService(
 				Context.WINDOW_SERVICE);
 		params = new WindowManager.LayoutParams();
@@ -145,67 +196,10 @@ public class SimulateKeyService extends Service {
 		params.height = WindowManager.LayoutParams.WRAP_CONTENT;
 	}
 
-	protected void initFloatWindow() {
-		Log.i(TAG, "initFloatWindow()");
-		this.initParams();
-
-		/* 根Layout */
-		floatLayout = new LinearLayout(getApplicationContext());
-		floatLayout.setOrientation(LinearLayout.VERTICAL);
-
-		/* 在原来的基础上添加自己必要的View */
-		btnMove = new Button(getApplicationContext());
-		btnMove.setText("  ← 移动 →  ");
-		btnMove.setBackgroundColor(0xFFDADADA);
-		btnMove.setTextColor(0xFFFFFFFF);
-		btnMove.setOnTouchListener(moveListener);
-
-		btnQuit = new Button(getApplicationContext());
-		btnQuit.setText("  退出本应用  ");
-		btnQuit.setBackgroundColor(0xFFDADADA);
-		btnQuit.setTextColor(0xFFFFFFFF);
-		btnQuit.setOnClickListener(quitListener);
-
-		floatLayout.addView(btnMove);
-		floatLayout.addView(btnQuit);
-		wm.addView(floatLayout, params);
-	}
-
-	protected void initFloatWindowV2() {
-		this.initParams();
-		LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-		/* 根Layout */
-		floatLayout = (LinearLayout) inflater
-				.inflate(R.layout.float_view, null);
-
-		int fWidth = floatLayout.getWidth();
-		int fHeight = floatLayout.getHeight();
-		Log.d(TAG, "fWidth:" + fWidth + ", fHeight:" + fHeight);
-
-		DisplayMetrics dm = getApplication().getResources().getDisplayMetrics();
-		Log.d(TAG, "widthPixels:" + dm.widthPixels);
-		Log.d(TAG, "heightPixels:" + dm.heightPixels);
-		Log.d(TAG, "density:" + dm.density);
-		Log.d(TAG, "densityDpi:" + dm.densityDpi);
-		Log.d(TAG, "xdpi:" + dm.xdpi);
-		Log.d(TAG, "ydpi:" + dm.ydpi);
-		Log.d(TAG, "scaledDensity:" + dm.scaledDensity);
-
-		this.initEventV2();
-		this.initViewV2();
-		wm.addView(floatLayout, params);
-		floatLayout.post(new Runnable() {
-
-			@Override
-			public void run() {
-				int fWidth = floatLayout.getWidth();
-				int fHeight = floatLayout.getHeight();
-				Log.d(TAG, "fWidth:" + fWidth + ", fHeight:" + fHeight);
-			}
-		});
-	}
-
-	protected void initEventV2() {
+	/**
+	 * 初始化悬浮窗事件
+	 */
+	protected void initEvent() {
 		btnMove = (Button) floatLayout.findViewById(R.id.btnMove);
 		btnMove.setOnTouchListener(moveListener);
 
@@ -220,17 +214,15 @@ public class SimulateKeyService extends Service {
 		btnQuit.setOnClickListener(quitListener);
 	}
 
-	protected void initViewV2() {
+	/**
+	 * 初始化悬浮窗子View，调整宽高
+	 */
+	protected void initView() {
 		DisplayMetrics dm = getApplication().getResources().getDisplayMetrics();
 		int width = dm.widthPixels / floatLayout.getChildCount();
-		Log.i(TAG, "Child = " + floatLayout.getChildCount());
 		for (int i = 0, count = floatLayout.getChildCount(); i < count; i++) {
 			Button child = (Button) floatLayout.getChildAt(i);
 			child.setWidth(width);
-			Log.d(TAG, child.getText() + "#Left:" + child.getPaddingLeft()
-					+ ", Right:" + child.getPaddingRight());
-			Log.d(TAG, child.getText() + "#Top:" + child.getPaddingTop()
-					+ ", Bottom:" + child.getPaddingBottom());
 			child.setPadding(0, 0, 0, 0);
 		}
 	}
