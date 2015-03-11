@@ -98,14 +98,15 @@ public class SimulateKeyService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.i(TAG, "onStartCommand()");
 		// 什么时候intent会为空呢？ //
+		boolean hasExtra = false;
 		if (intent != null) {
 			String action = intent.getAction();
 			Log.i(TAG, "Action = " + action);
+			hasExtra = intent.getBooleanExtra(KEY_HAS_EXTRA, false); 
 		} else {
 			Log.w(TAG, "Intent is null");
 		}
 
-		boolean hasExtra = intent.getBooleanExtra(KEY_HAS_EXTRA, false);
 		if (hasExtra) {
 			processExtra(intent.getExtras());
 		} else if (!isFwShow) {
