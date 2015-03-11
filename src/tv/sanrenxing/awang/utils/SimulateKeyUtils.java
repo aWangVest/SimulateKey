@@ -12,7 +12,7 @@ public class SimulateKeyUtils {
 	private static Toast toast = null;
 
 	/**
-	 * Toast消息
+	 * Toast娑堟伅
 	 * 
 	 * @param context
 	 * @param msg
@@ -26,7 +26,7 @@ public class SimulateKeyUtils {
 	}
 
 	/**
-	 * 模拟按键消息
+	 * 妯℃嫙鎸夐敭娑堟伅
 	 * 
 	 * @param keyCode
 	 */

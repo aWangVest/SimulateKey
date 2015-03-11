@@ -50,7 +50,7 @@ public class SimulateKeyService extends Service {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			/* ÕâÑùµÄ»°£¬Ö»ÓĞÔÚÒÆ¶¯µÄÊ±ºò²Å»á¸üĞÂÎ»ÖÃ£¬²»»áÒ»µã»÷¾ÍÒÆ¶¯ÁË[2014-9-13 16:57:34] */
+			/* è¿™æ ·çš„è¯ï¼Œåªæœ‰åœ¨ç§»åŠ¨çš„æ—¶å€™æ‰ä¼šæ›´æ–°ä½ç½®ï¼Œä¸ä¼šä¸€ç‚¹å‡»å°±ç§»åŠ¨äº†[2014-9-13 16:57:34] */
 			if (event.getAction() != MotionEvent.ACTION_MOVE) {
 				return false;
 			}
@@ -90,7 +90,7 @@ public class SimulateKeyService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.i(TAG, "onStartCommand()");
-		// Ê²Ã´Ê±ºòintent»áÎª¿ÕÄØ£¿ //
+		// ä»€ä¹ˆæ—¶å€™intentä¼šä¸ºç©ºå‘¢ï¼Ÿ //
 		if (intent != null) {
 			String action = intent.getAction();
 			Log.i(TAG, "Action = " + action);
@@ -132,7 +132,7 @@ public class SimulateKeyService extends Service {
 
 	protected void initParams() {
 		Log.i(TAG, "initParams()");
-		/* ÕâÀï×¢ÒâĞèÒªgetApplicationContext */
+		/* è¿™é‡Œæ³¨æ„éœ€è¦getApplicationContext */
 		wm = (WindowManager) getApplicationContext().getSystemService(
 				Context.WINDOW_SERVICE);
 		params = new WindowManager.LayoutParams();
@@ -149,19 +149,19 @@ public class SimulateKeyService extends Service {
 		Log.i(TAG, "initFloatWindow()");
 		this.initParams();
 
-		/* ¸ùLayout */
+		/* æ ¹Layout */
 		floatLayout = new LinearLayout(getApplicationContext());
 		floatLayout.setOrientation(LinearLayout.VERTICAL);
 
-		/* ÔÚÔ­À´µÄ»ù´¡ÉÏÌí¼Ó×Ô¼º±ØÒªµÄView */
+		/* åœ¨åŸæ¥çš„åŸºç¡€ä¸Šæ·»åŠ è‡ªå·±å¿…è¦çš„View */
 		btnMove = new Button(getApplicationContext());
-		btnMove.setText("  ¡û ÒÆ¶¯ ¡ú  ");
+		btnMove.setText("  â† ç§»åŠ¨ â†’  ");
 		btnMove.setBackgroundColor(0xFFDADADA);
 		btnMove.setTextColor(0xFFFFFFFF);
 		btnMove.setOnTouchListener(moveListener);
 
 		btnQuit = new Button(getApplicationContext());
-		btnQuit.setText("  ÍË³ö±¾Ó¦ÓÃ  ");
+		btnQuit.setText("  é€€å‡ºæœ¬åº”ç”¨  ");
 		btnQuit.setBackgroundColor(0xFFDADADA);
 		btnQuit.setTextColor(0xFFFFFFFF);
 		btnQuit.setOnClickListener(quitListener);
@@ -174,7 +174,7 @@ public class SimulateKeyService extends Service {
 	protected void initFloatWindowV2() {
 		this.initParams();
 		LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-		/* ¸ùLayout */
+		/* æ ¹Layout */
 		floatLayout = (LinearLayout) inflater
 				.inflate(R.layout.float_view, null);
 

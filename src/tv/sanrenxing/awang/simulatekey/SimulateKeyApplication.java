@@ -15,13 +15,13 @@ public class SimulateKeyApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		UserStrategy strategy = new UserStrategy(this);
-		// ÇşµÀÃû³Æ //
+		// æ¸ é“åç§° //
 		strategy.setAppChannel("Debug");
-		// ÑÓ³ÙÌá½»´¦Àí //
+		// å»¶è¿Ÿæäº¤å¤„ç† //
 		strategy.setAppReportDelay(3000);
-		// Context, AppID, isDebug(»áÔÚlogcatÊä³ötagÎªCrashReportµÄÈÕÖ¾) //
+		// Context, AppID, isDebug(ä¼šåœ¨logcatè¾“å‡ºtagä¸ºCrashReportçš„æ—¥å¿—) //
 		CrashReport.initCrashReport(this, "900002350", true, strategy);
-		// ÉèÖÃÓÃ»§Î¨Ò»±êÊ¶ //
+		// è®¾ç½®ç”¨æˆ·å”¯ä¸€æ ‡è¯† //
 		CrashReport.setUserId("aWang");
 	}
 }

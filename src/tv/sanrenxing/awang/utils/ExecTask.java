@@ -11,7 +11,7 @@ import java.util.List;
 import android.util.Log;
 
 /**
- * ÓÃÓÚÖ´ĞĞÃüÁî
+ * ç”¨äºæ‰§è¡Œå‘½ä»¤
  * 
  * @author aWang
  * @since 2014-10-08
@@ -19,25 +19,25 @@ import android.util.Log;
  */
 public class ExecTask extends Thread {
 
-	/** ËÆºõÊ²Ã´ÊÂ¶¼²»»á×ö */
+	/** ä¼¼ä¹ä»€ä¹ˆäº‹éƒ½ä¸ä¼šåš */
 	private static int TAG_DEFALUT = 0;
 	/**
-	 * ĞèÒª¶ÁÈ¡Êä³ö(ÅäºÏCallback2Ê¹ÓÃ) <br>
-	 * »Øµ÷ {@code public void callback(String line);} ·½·¨
+	 * éœ€è¦è¯»å–è¾“å‡º(é…åˆCallback2ä½¿ç”¨) <br>
+	 * å›è°ƒ {@code public void callback(String line);} æ–¹æ³•
 	 **/
 	public static final int TAG_WITH_OUTPUT = 0x01;
 	/**
-	 * ĞèÒª¶ÁÈ¡Êä³ö(¿ÉÅäºÏCallbackÊ¹ÓÃ£¬Ò²¿Éµ÷ÓÃgetOutput()»ñÈ¡ <br>
-	 * »Øµ÷ {@code public void callback(int exitCode, String results);} ·½·¨
+	 * éœ€è¦è¯»å–è¾“å‡º(å¯é…åˆCallbackä½¿ç”¨ï¼Œä¹Ÿå¯è°ƒç”¨getOutput()è·å– <br>
+	 * å›è°ƒ {@code public void callback(int exitCode, String results);} æ–¹æ³•
 	 */
 	public static final int TAG_GET_OUTPUT = 0x02;
-	/** ÒÔROOTÉí·İÖ´ĞĞ */
+	/** ä»¥ROOTèº«ä»½æ‰§è¡Œ */
 	public static final int TAG_RUNAS_ROOT = 0x04;
-	/** ÃüÁî¼¯Ö´ĞĞÍê³ÉÖ®ºóÍË³öROOT */
+	/** å‘½ä»¤é›†æ‰§è¡Œå®Œæˆä¹‹åé€€å‡ºROOT */
 	public static final int TAG_EXIT_ROOT = 0x08;
 	/**
-	 * µÈ´ıÃüÁîÖ´ĞĞÍê³É <br>
-	 * ¿ÉÍ¨¹ı{@code getExitCode}º¯Êı»ñÈ¡ÍË³öÂë
+	 * ç­‰å¾…å‘½ä»¤æ‰§è¡Œå®Œæˆ <br>
+	 * å¯é€šè¿‡{@code getExitCode}å‡½æ•°è·å–é€€å‡ºç 
 	 * */
 	public static final int TAG_GET_EXEC_STATE = 0x10;
 
@@ -51,11 +51,11 @@ public class ExecTask extends Thread {
 	public static final int STATUS_UNKNOWN = -1;
 
 	/**
-	 * »ñÈ¡InputStreamÖ®ºóreadÊ§°Ü
+	 * è·å–InputStreamä¹‹åreadå¤±è´¥
 	 */
 	private static final int EXIT_CODE_GETINPUTSTREAM_ERROR = -100;
 	/**
-	 * »ñÈ¡OutputStreamÖµwriteÊ§°Ü
+	 * è·å–OutputStreamå€¼writeå¤±è´¥
 	 */
 	private static final int EXIT_CODE_EPIPE_ERROR = -101;
 
@@ -68,7 +68,7 @@ public class ExecTask extends Thread {
 	private List<String> inputs = null;
 
 	/**
-	 * ÒÔÄ¬ÈÏµÄ·½Ê½Ö´ĞĞÃüÁî
+	 * ä»¥é»˜è®¤çš„æ–¹å¼æ‰§è¡Œå‘½ä»¤
 	 * 
 	 * @param command
 	 */
@@ -77,7 +77,7 @@ public class ExecTask extends Thread {
 	}
 
 	/**
-	 * °´ÕÕtagÖ¸Ê¾Ö´ĞĞÃüÁî
+	 * æŒ‰ç…§tagæŒ‡ç¤ºæ‰§è¡Œå‘½ä»¤
 	 * 
 	 * @param command
 	 * @param inputs
@@ -87,7 +87,7 @@ public class ExecTask extends Thread {
 	}
 
 	/**
-	 * °´ÕÕtagÖ¸Ê¾Ö´ĞĞÃüÁî
+	 * æŒ‰ç…§tagæŒ‡ç¤ºæ‰§è¡Œå‘½ä»¤
 	 * 
 	 * @param command
 	 * @param tag
@@ -97,7 +97,7 @@ public class ExecTask extends Thread {
 	}
 
 	/**
-	 * °´ÕÕtagÖ¸Ê¾Ö´ĞĞÃüÁî£¬²¢¶ÔÆä½øĞĞÊäÈë
+	 * æŒ‰ç…§tagæŒ‡ç¤ºæ‰§è¡Œå‘½ä»¤ï¼Œå¹¶å¯¹å…¶è¿›è¡Œè¾“å…¥
 	 * 
 	 * @param commands
 	 * @param inputs
@@ -128,7 +128,7 @@ public class ExecTask extends Thread {
 		this.callback2 = callback2;
 	}
 
-	/* ¿ØÖÆÏß³Ì×´Ì¬£¬Ä¬ÈÏstartÖ®ºóÂíÉÏ½øĞĞ */
+	/* æ§åˆ¶çº¿ç¨‹çŠ¶æ€ï¼Œé»˜è®¤startä¹‹åé©¬ä¸Šè¿›è¡Œ */
 	private int status = STATUS_START;
 
 	public int getStatus() {
@@ -142,7 +142,7 @@ public class ExecTask extends Thread {
 	private int exitCode = -1;
 
 	/**
-	 * »ñÈ¡ÃüÁîÖ´ĞĞÍê³ÉºóµÄÍË³öÂë
+	 * è·å–å‘½ä»¤æ‰§è¡Œå®Œæˆåçš„é€€å‡ºç 
 	 * 
 	 * @return
 	 */
@@ -153,7 +153,7 @@ public class ExecTask extends Thread {
 	private StringBuffer output = null;
 
 	/**
-	 * »ñÈ¡ÃüÁîÖ´ĞĞÍê³ÉºóµÄ½á¹û
+	 * è·å–å‘½ä»¤æ‰§è¡Œå®Œæˆåçš„ç»“æœ
 	 * 
 	 * @return
 	 */
@@ -172,7 +172,7 @@ public class ExecTask extends Thread {
 				if (inputs == null) {
 					inputs = new ArrayList<String>();
 				}
-				/* commandĞèÒªÌí¼Óµ½µÚÒ»¸ö£¬×÷Îª"Ö÷ÃüÁî" */
+				/* commandéœ€è¦æ·»åŠ åˆ°ç¬¬ä¸€ä¸ªï¼Œä½œä¸º"ä¸»å‘½ä»¤" */
 				if (command != null) {
 					inputs.add(0, command);
 				}
@@ -192,7 +192,7 @@ public class ExecTask extends Thread {
 		if (inputs != null) {
 			this.writeInputs();
 		}
-		/* ¶ÁÈ¡ÃüÁîÖ´ĞĞÊä³öµÄ½á¹û */
+		/* è¯»å–å‘½ä»¤æ‰§è¡Œè¾“å‡ºçš„ç»“æœ */
 		if ((tag & TAG_WITH_OUTPUT) != 0 || (tag & TAG_GET_OUTPUT) != 0) {
 			this.readResults();
 		} else if ((tag & TAG_GET_EXEC_STATE) != 0) {
@@ -212,11 +212,11 @@ public class ExecTask extends Thread {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			/* Èç¹ûÕâÀïin²»close»áÔõÃ´Ñù£¿ */
+			/* å¦‚æœè¿™é‡Œinä¸closeä¼šæ€ä¹ˆæ ·ï¼Ÿ */
 		}
-		/* waitForºÍexitValueÓ¦¸ÃÔÚ¶ÁÈ¡Êä³öÖ®ºó½øĞĞ */
-		/* ·ñÔò£¬Ç°Õß½«µ¼ÖÂ×èÈû£¬ºóÕß½«µ¼ÖÂÒì³£ */
-		/* ÊÇ²»ÊÇÆäÊµÓ¦¸ÃÔÚdestoryÖ®ºóÔÙ¶ÁÈ¡£¿ */
+		/* waitForå’ŒexitValueåº”è¯¥åœ¨è¯»å–è¾“å‡ºä¹‹åè¿›è¡Œ */
+		/* å¦åˆ™ï¼Œå‰è€…å°†å¯¼è‡´é˜»å¡ï¼Œåè€…å°†å¯¼è‡´å¼‚å¸¸ */
+		/* æ˜¯ä¸æ˜¯å…¶å®åº”è¯¥åœ¨destoryä¹‹åå†è¯»å–ï¼Ÿ */
 		if ((tag & TAG_GET_EXEC_STATE) != 0 || (tag & TAG_GET_OUTPUT) != 0
 				|| callback != null) {
 			if (exitCode != EXIT_CODE_GETINPUTSTREAM_ERROR) {
@@ -227,7 +227,7 @@ public class ExecTask extends Thread {
 				}
 			}
 		} else if ((tag & TAG_WITH_OUTPUT) == 0) {
-			/* ÒòÎªTAG_WITH_OUTPUTµÄÊ±ºòreadResultsÀïÃæ»á°ÑInputStream¹Ø±Õ */
+			/* å› ä¸ºTAG_WITH_OUTPUTçš„æ—¶å€™readResultsé‡Œé¢ä¼šæŠŠInputStreamå…³é—­ */
 			if (process != null) {
 				/**
 				 * libcore.io.ErrnoException: kill failed: EPERM (Operation not
@@ -246,7 +246,7 @@ public class ExecTask extends Thread {
 	}
 
 	/**
-	 * ¶ÁÈ¡ÃüÁîµÄÖ´ĞĞ½á¹û
+	 * è¯»å–å‘½ä»¤çš„æ‰§è¡Œç»“æœ
 	 */
 	protected void readResults() {
 		try {
@@ -255,9 +255,9 @@ public class ExecTask extends Thread {
 
 			String line = reader.readLine();
 			Log.d(TAG, "[A]readLine = " + line);
-			/* Èç¹û¶ÁÈ¡²»µ½½á¹û£¬ÄÇÃ´¾Í¶ÁÈ¡ErrorStream */
+			/* å¦‚æœè¯»å–ä¸åˆ°ç»“æœï¼Œé‚£ä¹ˆå°±è¯»å–ErrorStream */
 			if (line == null) {
-				/* aWang£¬2014-12-09 17:28:16£¬Èç¹ûÎŞ·¨»ñÈ¡±ê×¼Êä³öÁ÷µÄ»°£¬¾ÍÊÓÎª±¾ÌõÖ¸ÁîÖ´ĞĞÊ§°Ü */
+				/* aWangï¼Œ2014-12-09 17:28:16ï¼Œå¦‚æœæ— æ³•è·å–æ ‡å‡†è¾“å‡ºæµçš„è¯ï¼Œå°±è§†ä¸ºæœ¬æ¡æŒ‡ä»¤æ‰§è¡Œå¤±è´¥ */
 				reader = new BufferedReader(new InputStreamReader(
 						process.getErrorStream()));
 				line = reader.readLine();
@@ -307,7 +307,7 @@ public class ExecTask extends Thread {
 	}
 
 	/**
-	 * Ö´ĞĞÃüÁî£¬²¢¶ÔÆä½øĞĞÊäÈë
+	 * æ‰§è¡Œå‘½ä»¤ï¼Œå¹¶å¯¹å…¶è¿›è¡Œè¾“å…¥
 	 * 
 	 * http://orgcent.com/android-chmod-root-permission/
 	 */
@@ -316,7 +316,7 @@ public class ExecTask extends Thread {
 			writer = new DataOutputStream(process.getOutputStream());
 			for (int i = 0; i < inputs.size(); i++) {
 				Log.d(TAG, "Sub Command - " + inputs.get(i));
-				/* ĞèÒª¼ÓÒ»¸ö"\n"µÄ½áÊø·û£¬±íÊ¾ÃüÁî»Ø³µ */
+				/* éœ€è¦åŠ ä¸€ä¸ª"\n"çš„ç»“æŸç¬¦ï¼Œè¡¨ç¤ºå‘½ä»¤å›è½¦ */
 				writer.writeBytes(inputs.get(i) + "\n");
 				writer.flush();
 			}
@@ -340,7 +340,7 @@ public class ExecTask extends Thread {
 	}
 
 	/**
-	 * ´òÓ¡/ÏÔÊ¾´íÎóĞÅÏ¢
+	 * æ‰“å°/æ˜¾ç¤ºé”™è¯¯ä¿¡æ¯
 	 * 
 	 * @param msg
 	 * @param e
@@ -354,25 +354,25 @@ public class ExecTask extends Thread {
 	}
 
 	/**
-	 * »ñÈ¡ÃüÁîÖ´ĞĞÍê³ÉÖ®ºóµÄ½á¹ûºÍÍË³öÂë
+	 * è·å–å‘½ä»¤æ‰§è¡Œå®Œæˆä¹‹åçš„ç»“æœå’Œé€€å‡ºç 
 	 */
 	public interface Callback {
 		/**
 		 * @param exitCode
 		 *            process.exitCode()
 		 * @param results
-		 *            ÃüÁîÖ´ĞĞÊä³öµÄ½á¹û
+		 *            å‘½ä»¤æ‰§è¡Œè¾“å‡ºçš„ç»“æœ
 		 */
 		public void callback(int exitCode, String results);
 	}
 
 	/**
-	 * »ñÈ¡ÃüÁîÖ´ĞĞ¹ı³ÌÖĞµÄÊä³ö
+	 * è·å–å‘½ä»¤æ‰§è¡Œè¿‡ç¨‹ä¸­çš„è¾“å‡º
 	 */
 	public interface Callback2 {
 		/**
 		 * @param line
-		 *            ÃüÁîÊä³öµÄµ±Ç°ĞĞ£¬Ã¿»ñÈ¡Ò»ĞĞ¾Í»Øµ÷Êä³öÒ»ĞĞ
+		 *            å‘½ä»¤è¾“å‡ºçš„å½“å‰è¡Œï¼Œæ¯è·å–ä¸€è¡Œå°±å›è°ƒè¾“å‡ºä¸€è¡Œ
 		 */
 		public void callback(String line);
 	}
