@@ -1,4 +1,4 @@
-package tv.sanrenxing.awang.simulatekey;
+package tv.sanrenxing.awang.utils;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -14,7 +14,7 @@ import android.util.Log;
  * ÓÃÓÚÖ´ÐÐÃüÁî
  * 
  * @author aWang
- * @since 2014-10-08 17:11:53
+ * @since 2014-10-08
  * 
  */
 public class ExecTask extends Thread {

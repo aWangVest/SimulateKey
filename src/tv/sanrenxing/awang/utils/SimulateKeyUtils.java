@@ -1,4 +1,4 @@
-package tv.sanrenxing.awang.simulatekey;
+package tv.sanrenxing.awang.utils;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -7,7 +7,7 @@ import android.widget.Toast;
  * @author aWang
  * @since 2015-3-10
  */
-public class Utils {
+public class SimulateKeyUtils {
 
 	private static Toast toast = null;
 

@@ -1,6 +1,9 @@
 package tv.sanrenxing.awang.simulatekey;
 
-import tv.sanrenxing.awang.simulatekey.ExecTask.Callback2;
+import com.tencent.bugly.crashreport.CrashReport;
+
+import tv.sanrenxing.awang.utils.ExecTask;
+import tv.sanrenxing.awang.utils.ExecTask.Callback2;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,7 +38,8 @@ public class MainActivity extends Activity {
 
 	public void onClickTest(View v) {
 		Log.i(TAG, "onClickTest()");
-		testSuInputV2();
+		CrashReport.testJavaCrash();
+		CrashReport.testNativeCrash();
 	}
 	
 	public void onClickAddHeight(View v) {

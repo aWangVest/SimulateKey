@@ -1,5 +1,6 @@
 package tv.sanrenxing.awang.simulatekey;
 
+import tv.sanrenxing.awang.utils.SimulateKeyUtils;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -66,7 +67,7 @@ public class SimulateKeyService extends Service {
 		public void onClick(View v) {
 			isRuning = false;
 			wm.removeView(floatLayout);
-			Utils.showMessage(getApplicationContext(), btnQuit.getText()
+			SimulateKeyUtils.showMessage(getApplicationContext(), btnQuit.getText()
 					.toString());
 		}
 	};
@@ -77,7 +78,7 @@ public class SimulateKeyService extends Service {
 		public void onClick(View v) {
 			String tag = (String) v.getTag();
 			int keyCode = Integer.valueOf(tag);
-			Utils.simulateKeyEvent(keyCode);
+			SimulateKeyUtils.simulateKeyEvent(keyCode);
 		}
 	};
 
