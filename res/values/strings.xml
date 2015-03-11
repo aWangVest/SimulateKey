@@ -14,6 +14,8 @@
     <string name="btn_zh_minus_height">按钮高度减小</string>
     <string name="btn_set_button_bg">设置按钮背景色</string>
     <string name="btn_set_text_color">设置文字颜色</string>
+    <string name="btn_zh_show_float_window">显示悬浮窗</string>
+    <string name="btn_zh_hidden_float_window">隐藏悬浮窗</string>
     <string name="start_SimulateKeyService_permission_label">启动SimulateKeyService</string>
     <string name="start_SimulateKeyService_permission_desc">启动SimulateKeyService</string>
 

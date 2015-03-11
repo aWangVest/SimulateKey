@@ -29,12 +29,32 @@
         android:text="@string/btn_zh_test" />
 
     <Button
-        android:id="@+id/btnAddHeight"
+        android:id="@+id/btnShowFlowWindow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignRight="@+id/btnTest"
         android:layout_below="@+id/btnTest"
+        android:onClick="onClickShowFlowWindow"
+        android:text="@string/btn_zh_show_float_window" />
+
+    <Button
+        android:id="@+id/btnHiddenFlowWindow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/btnShowFlowWindow"
+        android:layout_below="@+id/btnShowFlowWindow"
+        android:onClick="onClickHiddenFlowWindow"
+        android:text="@string/btn_zh_hidden_float_window" />
+
+    <Button
+        android:id="@+id/btnAddHeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/btnHiddenFlowWindow"
+        android:layout_below="@+id/btnHiddenFlowWindow"
         android:onClick="onClickAddHeight"
         android:text="@string/btn_zh_add_height" />
 
