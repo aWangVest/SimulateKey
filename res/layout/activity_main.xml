@@ -55,6 +55,7 @@
         android:layout_alignLeft="@+id/btnMinusHeight"
         android:layout_alignRight="@+id/btnMinusHeight"
         android:layout_below="@+id/btnMinusHeight"
+        android:onClick="onClickSetButtonBg"
         android:text="@string/btn_set_button_bg" />
 
     <Button
@@ -64,6 +65,7 @@
         android:layout_alignLeft="@+id/btnSetButtonBg"
         android:layout_alignRight="@+id/btnSetButtonBg"
         android:layout_below="@+id/btnSetButtonBg"
+        android:onClick="onClickSetTextColor"
         android:text="@string/btn_set_text_color" />
 
 </RelativeLayout>

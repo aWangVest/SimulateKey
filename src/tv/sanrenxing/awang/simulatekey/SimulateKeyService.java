@@ -1,5 +1,6 @@
 package tv.sanrenxing.awang.simulatekey;
 
+import tv.sanrenxing.awang.settings.SimulatePrefs;
 import tv.sanrenxing.awang.utils.SimulateKeyUtils;
 import android.app.Service;
 import android.content.Context;
@@ -92,7 +93,7 @@ public class SimulateKeyService extends Service {
 	public IBinder onBind(Intent intent) {
 		return null;
 	}
-	
+
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.i(TAG, "onStartCommand()");
@@ -125,19 +126,26 @@ public class SimulateKeyService extends Service {
 	protected void processExtra(Bundle extras) {
 		Log.i(TAG, "processExtra()");
 
+		int childBtnHeight = 0;
 		int doAction = extras.getInt(KEY_DO_ACTION, 0);
 		switch (doAction) {
 		case DO_ACTION_ADDHEIGHT:
 			for (int i = 0, count = floatLayout.getChildCount(); i < count; i++) {
 				Button child = (Button) floatLayout.getChildAt(i);
 				child.setHeight(child.getHeight() + 1);
+				childBtnHeight = child.getHeight();
 			}
+			SimulatePrefs.getInstance(getApplicationContext()).set(
+					SimulatePrefs.S_BTN_HEIGHT, childBtnHeight);
 			break;
 		case DO_ACTION_MINUSHEIGHT:
 			for (int i = 0, count = floatLayout.getChildCount(); i < count; i++) {
 				Button child = (Button) floatLayout.getChildAt(i);
 				child.setHeight(child.getHeight() - 1);
+				childBtnHeight = child.getHeight();
 			}
+			SimulatePrefs.getInstance(getApplicationContext()).set(
+					SimulatePrefs.S_BTN_HEIGHT, childBtnHeight);
 			break;
 		case DO_ACTION_SHOWWINDOW:
 			this.showFloatWindow();
@@ -220,10 +228,15 @@ public class SimulateKeyService extends Service {
 	protected void initView() {
 		DisplayMetrics dm = getApplication().getResources().getDisplayMetrics();
 		int width = dm.widthPixels / floatLayout.getChildCount();
+		int height = SimulatePrefs.getInstance(getApplicationContext()).getInt(
+				SimulatePrefs.S_BTN_HEIGHT, 0);
 		for (int i = 0, count = floatLayout.getChildCount(); i < count; i++) {
 			Button child = (Button) floatLayout.getChildAt(i);
-			child.setWidth(width);
 			child.setPadding(0, 0, 0, 0);
+			child.setWidth(width);
+			if (height != 0) {
+				child.setHeight(height);
+			}
 		}
 	}
 }

@@ -92,4 +92,24 @@ public class MainActivity extends Activity {
 				SimulateKeyService.DO_ACTION_MINUSHEIGHT);
 		startService(intent);
 	}
+
+	/**
+	 * 设置按钮背景色
+	 * 
+	 * @param v
+	 */
+	public void onClickSetButtonBg(View v) {
+		// TODO : 实现取色盘 //
+		SimulateKeyUtils.showMessage(getApplicationContext(), "暂未实现");
+	}
+
+	/**
+	 * 设置文字颜色
+	 * 
+	 * @param v
+	 */
+	public void onClickSetTextColor(View v) {
+		// TODO : 实现取色盘 //
+		SimulateKeyUtils.showMessage(getApplicationContext(), "暂未实现");
+	}
 }
