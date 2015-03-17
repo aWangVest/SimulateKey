@@ -17,7 +17,7 @@ public class SimulateKeyWinOpt {
 	 * @param context
 	 */
 	public static void showFloatWindow(Context context) {
-		Intent intent = new Intent(SimulateKeyService.NAME);
+		Intent intent = new Intent(context, SimulateKeyService.class);
 		// 第一次启动的时候，可以不带参数 //
 		intent.putExtra(SimulateKeyService.KEY_HAS_EXTRA, true);
 		intent.putExtra(SimulateKeyService.KEY_DO_ACTION,
@@ -31,7 +31,7 @@ public class SimulateKeyWinOpt {
 	 * @param context
 	 */
 	public static void hiddenFloatWindow(Context context) {
-		Intent intent = new Intent(SimulateKeyService.NAME);
+		Intent intent = new Intent(context, SimulateKeyService.class);
 		intent.putExtra(SimulateKeyService.KEY_HAS_EXTRA, true);
 		intent.putExtra(SimulateKeyService.KEY_DO_ACTION,
 				SimulateKeyService.DO_ACTION_HIDDENWINDOW);
@@ -44,8 +44,7 @@ public class SimulateKeyWinOpt {
 	 * @param context
 	 */
 	public static void btnAddHeight(Context context) {
-		Intent intent = new Intent(
-				"tv.sanrenxing.awang.simulatekey.SimulateKeyService");
+		Intent intent = new Intent(context, SimulateKeyService.class);
 		intent.putExtra(SimulateKeyService.KEY_HAS_EXTRA, true);
 		intent.putExtra(SimulateKeyService.KEY_DO_ACTION,
 				SimulateKeyService.DO_ACTION_ADDHEIGHT);
@@ -58,8 +57,7 @@ public class SimulateKeyWinOpt {
 	 * @param context
 	 */
 	public static void btnMinusHeight(Context context) {
-		Intent intent = new Intent(
-				"tv.sanrenxing.awang.simulatekey.SimulateKeyService");
+		Intent intent = new Intent(context, SimulateKeyService.class);
 		intent.putExtra(SimulateKeyService.KEY_HAS_EXTRA, true);
 		intent.putExtra(SimulateKeyService.KEY_DO_ACTION,
 				SimulateKeyService.DO_ACTION_MINUSHEIGHT);

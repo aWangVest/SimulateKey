@@ -5,9 +5,15 @@ import tv.sanrenxing.awang.utils.SimulateKeyUtils;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
+import android.os.Process;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -28,8 +34,6 @@ import android.widget.LinearLayout;
 public class SimulateKeyService extends Service {
 
 	private static final String TAG = "SimulateKey";
-
-	public static final String NAME = "tv.sanrenxing.awang.simulatekey.SimulateKeyService";
 
 	public static final String KEY_HAS_EXTRA = "hasExtra";
 	public static final String KEY_DO_ACTION = "doAction";
@@ -56,6 +60,24 @@ public class SimulateKeyService extends Service {
 	private Button btnHome = null;
 	private Button btnBack = null;
 
+	private SimulatePrefs prefs = null;
+
+	private static final class ServiceHandler extends Handler{
+		
+		public ServiceHandler(Looper looper) {
+			super(looper);
+		}
+
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+		}
+	};
+	
+	protected Looper mServiceLooper = null;
+	protected ServiceHandler mServiceHandler = null;
+
+	// 移动 //
 	private OnTouchListener moveListener = new View.OnTouchListener() {
 
 		@Override
@@ -72,6 +94,7 @@ public class SimulateKeyService extends Service {
 		}
 	};
 
+	// 隐藏 //
 	private OnClickListener quitListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
@@ -79,6 +102,7 @@ public class SimulateKeyService extends Service {
 		}
 	};
 
+	// 按键 //
 	private OnClickListener keySimulateListener = new View.OnClickListener() {
 
 		@Override
@@ -91,7 +115,51 @@ public class SimulateKeyService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
+		Log.i(TAG, "onBind()");
 		return null;
+	}
+
+	@Override
+	public void onCreate() {
+		Log.i(TAG, "onCreate()");
+		super.onCreate();
+		prefs = SimulatePrefs.getInstance(getApplicationContext());
+		
+		HandlerThread thread = new HandlerThread("SimulateKeyService",
+				Process.THREAD_PRIORITY_FOREGROUND);
+		thread.start();
+		mServiceLooper = thread.getLooper();
+		mServiceHandler = new ServiceHandler(mServiceLooper);
+	}
+
+	@Override
+	public void onLowMemory() {
+		Log.i(TAG, "onLowMemory()");
+		super.onLowMemory();
+	}
+
+	@Override
+	public void onTrimMemory(int level) {
+		Log.i(TAG, "onTrimMemory()");
+		super.onTrimMemory(level);
+	}
+
+	@Override
+	public void onTaskRemoved(Intent rootIntent) {
+		Log.i(TAG, "onTaskRemoved()");
+		super.onTaskRemoved(rootIntent);
+	}
+
+	@Override
+	public void onDestroy() {
+		Log.i(TAG, "onDestroy()");
+		super.onDestroy();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		Log.i(TAG, "onConfigurationChanged()");
+		super.onConfigurationChanged(newConfig);
 	}
 
 	@Override
@@ -100,22 +168,25 @@ public class SimulateKeyService extends Service {
 		// 什么时候intent会为空呢？ //
 		boolean hasExtra = false;
 		if (intent != null) {
-			String action = intent.getAction();
-			Log.i(TAG, "Action = " + action);
-			hasExtra = intent.getBooleanExtra(KEY_HAS_EXTRA, false); 
+			hasExtra = intent.getBooleanExtra(KEY_HAS_EXTRA, false);
 		} else {
-			Log.w(TAG, "Intent is null");
+			Log.w(TAG, "== Intent is null ==");
 		}
 
 		if (hasExtra) {
 			processExtra(intent.getExtras());
 		} else if (!isFwShow) {
-			initFloatWindow();
-			isFwShow = true;
+			if (prefs.getBoolean(SimulatePrefs.B_IS_HIDDEN, false)) {
+				// 如果是手动隐藏，那么系统重启Service的时候不应该显示出来 //
+			} else {
+				initFloatWindow();
+				isFwShow = true;
+			}
 		} else {
-			Log.w(TAG, "isRuning");
+			Log.w(TAG, "== isRuning ==");
 		}
-		return super.onStartCommand(intent, flags, startId);
+		// 系统重新创建Service时，传递最后一个Intent //
+		return START_REDELIVER_INTENT;
 	}
 
 	/**
@@ -135,8 +206,7 @@ public class SimulateKeyService extends Service {
 				child.setHeight(child.getHeight() + 1);
 				childBtnHeight = child.getHeight();
 			}
-			SimulatePrefs.getInstance(getApplicationContext()).set(
-					SimulatePrefs.S_BTN_HEIGHT, childBtnHeight);
+			prefs.set(SimulatePrefs.S_BTN_HEIGHT, childBtnHeight);
 			break;
 		case DO_ACTION_MINUSHEIGHT:
 			for (int i = 0, count = floatLayout.getChildCount(); i < count; i++) {
@@ -144,8 +214,7 @@ public class SimulateKeyService extends Service {
 				child.setHeight(child.getHeight() - 1);
 				childBtnHeight = child.getHeight();
 			}
-			SimulatePrefs.getInstance(getApplicationContext()).set(
-					SimulatePrefs.S_BTN_HEIGHT, childBtnHeight);
+			prefs.set(SimulatePrefs.S_BTN_HEIGHT, childBtnHeight);
 			break;
 		case DO_ACTION_SHOWWINDOW:
 			this.showFloatWindow();
@@ -244,8 +313,7 @@ public class SimulateKeyService extends Service {
 	protected void initView() {
 		DisplayMetrics dm = getApplication().getResources().getDisplayMetrics();
 		int width = dm.widthPixels / floatLayout.getChildCount();
-		int height = SimulatePrefs.getInstance(getApplicationContext()).getInt(
-				SimulatePrefs.S_BTN_HEIGHT, 0);
+		int height = prefs.getInt(SimulatePrefs.S_BTN_HEIGHT, 0);
 		for (int i = 0, count = floatLayout.getChildCount(); i < count; i++) {
 			Button child = (Button) floatLayout.getChildAt(i);
 			child.setPadding(0, 0, 0, 0);

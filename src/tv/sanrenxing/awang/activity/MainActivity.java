@@ -1,5 +1,7 @@
-package tv.sanrenxing.awang.simulatekey;
+package tv.sanrenxing.awang.activity;
 
+import tv.sanrenxing.awang.simulatekey.R;
+import tv.sanrenxing.awang.simulatekey.SimulateKeyWinOpt;
 import tv.sanrenxing.awang.utils.SimulateKeyUtils;
 import android.app.Activity;
 import android.os.Bundle;

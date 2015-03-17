@@ -18,6 +18,7 @@ public class SimulatePrefs {
 	public static final String S_BTN_HEIGHT = "btn_height";
 	public static final String S_BTN_BG_COLOR = "btn_bg_color";
 	public static final String S_BTN_TEXT_COLOR = "btn_text_color";
+	public static final String B_IS_HIDDEN = "isHidden";
 	
 	///////////////////////////////////////////////////////
 	
