@@ -2,6 +2,7 @@ package tv.sanrenxing.awang.simulatekey;
 
 import tv.sanrenxing.awang.settings.SimulatePrefs;
 import tv.sanrenxing.awang.utils.SimulateKeyUtils;
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -47,38 +48,64 @@ public class SimulateKeyService extends Service {
 	/*** 隐藏悬浮窗 */
 	public static final int DO_ACTION_HIDDENWINDOW = 4;
 
+	protected static final int MSG_SHOW = 1;
+	protected static final int MSG_HIDDEN = 2;
+	protected static final int MSG_PROC_EXTRA = 3;
+	protected static final int MSG_TOGGLE_BUTTONS = 4;
+
+	/*** 双击的间隔时间定义 */
+	protected static final long DOUBLE_CLICK_INTERVAL = 300;
+
 	/*** 悬浮窗是否显示 */
-	private boolean isFwShow = false;
+	protected boolean isFwShow = false;
 
-	private WindowManager wm = null;
-	private LayoutParams params = null;
-	private LinearLayout floatLayout = null;
+	protected WindowManager wm = null;
+	protected LayoutParams params = null;
+	protected LinearLayout floatLayout = null;
 
-	private Button btnMove = null;
-	private Button btnQuit = null;
-	private Button btnMenu = null;
-	private Button btnHome = null;
-	private Button btnBack = null;
+	protected Button btnMove = null;
+	protected Button btnQuit = null;
+	protected Button btnMenu = null;
+	protected Button btnHome = null;
+	protected Button btnBack = null;
 
-	private SimulatePrefs prefs = null;
+	protected SimulatePrefs prefs = null;
 
-	private static final class ServiceHandler extends Handler{
-		
+	protected Looper mServiceLooper = null;
+	protected ServiceHandler mServiceHandler = null;
+
+	@SuppressLint("HandlerLeak")
+	protected final class ServiceHandler extends Handler {
+
 		public ServiceHandler(Looper looper) {
 			super(looper);
 		}
 
 		@Override
 		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
+			Log.i(TAG, "handleMessage - " + msg.what);
+			switch (msg.what) {
+			case MSG_SHOW:
+				showFloatWindow();
+				break;
+			case MSG_HIDDEN:
+				hiddenFloatWindow();
+				break;
+			case MSG_PROC_EXTRA:
+				processExtra((Bundle) msg.obj);
+				break;
+			case MSG_TOGGLE_BUTTONS:
+				toggleButtons();
+				break;
+			default:
+				super.handleMessage(msg);
+				break;
+			}
 		}
 	};
-	
-	protected Looper mServiceLooper = null;
-	protected ServiceHandler mServiceHandler = null;
 
-	// 移动 //
-	private OnTouchListener moveListener = new View.OnTouchListener() {
+	// 移动-触摸 //
+	protected OnTouchListener moveListener = new View.OnTouchListener() {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
@@ -94,8 +121,26 @@ public class SimulateKeyService extends Service {
 		}
 	};
 
+	// 移动-点击 //
+	protected OnClickListener moveClickListener = new View.OnClickListener() {
+
+		private long lastClick = 0;
+
+		@Override
+		public void onClick(View v) {
+			long interval = System.currentTimeMillis() - lastClick;
+			Log.d(TAG, "onClick - " + interval);
+			lastClick = System.currentTimeMillis();
+			if (interval < DOUBLE_CLICK_INTERVAL) {
+				// 防止三击变成两个双击的问题 //
+				lastClick = 0;
+				mServiceHandler.sendEmptyMessage(MSG_TOGGLE_BUTTONS);
+			}
+		}
+	};
+
 	// 隐藏 //
-	private OnClickListener quitListener = new View.OnClickListener() {
+	protected OnClickListener quitListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			hiddenFloatWindow();
@@ -103,7 +148,7 @@ public class SimulateKeyService extends Service {
 	};
 
 	// 按键 //
-	private OnClickListener keySimulateListener = new View.OnClickListener() {
+	protected OnClickListener keySimulateListener = new View.OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
@@ -124,9 +169,9 @@ public class SimulateKeyService extends Service {
 		Log.i(TAG, "onCreate()");
 		super.onCreate();
 		prefs = SimulatePrefs.getInstance(getApplicationContext());
-		
+
 		HandlerThread thread = new HandlerThread("SimulateKeyService",
-				Process.THREAD_PRIORITY_FOREGROUND);
+				Process.THREAD_PRIORITY_DEFAULT);
 		thread.start();
 		mServiceLooper = thread.getLooper();
 		mServiceHandler = new ServiceHandler(mServiceLooper);
@@ -165,22 +210,15 @@ public class SimulateKeyService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.i(TAG, "onStartCommand()");
-		// 什么时候intent会为空呢？ //
-		boolean hasExtra = false;
 		if (intent != null) {
-			hasExtra = intent.getBooleanExtra(KEY_HAS_EXTRA, false);
-		} else {
-			Log.w(TAG, "== Intent is null ==");
-		}
-
-		if (hasExtra) {
-			processExtra(intent.getExtras());
+			mServiceHandler.sendMessage(mServiceHandler.obtainMessage(
+					MSG_PROC_EXTRA, intent.getExtras()));
 		} else if (!isFwShow) {
+			Log.w(TAG, "== Intent is null ==");
 			if (prefs.getBoolean(SimulatePrefs.B_IS_HIDDEN, false)) {
 				// 如果是手动隐藏，那么系统重启Service的时候不应该显示出来 //
 			} else {
-				initFloatWindow();
-				isFwShow = true;
+				mServiceHandler.sendEmptyMessage(MSG_SHOW);
 			}
 		} else {
 			Log.w(TAG, "== isRuning ==");
@@ -196,9 +234,14 @@ public class SimulateKeyService extends Service {
 	 */
 	protected void processExtra(Bundle extras) {
 		Log.i(TAG, "processExtra()");
-
+		if (extras == null) {
+			Log.w(TAG, "== extras is null ==");
+			return;
+		}
 		int childBtnHeight = 0;
 		int doAction = extras.getInt(KEY_DO_ACTION, 0);
+		Log.i(TAG, "MsgID : " + doAction + ", ThreadID : "
+				+ Thread.currentThread().getId());
 		switch (doAction) {
 		case DO_ACTION_ADDHEIGHT:
 			for (int i = 0, count = floatLayout.getChildCount(); i < count; i++) {
@@ -222,6 +265,51 @@ public class SimulateKeyService extends Service {
 		case DO_ACTION_HIDDENWINDOW:
 			this.hiddenFloatWindow();
 			break;
+		}
+	}
+
+	protected boolean isButtonsShow = true;
+
+	/**
+	 * 显示/隐藏按钮
+	 */
+	protected void toggleButtons() {
+		if (isButtonsShow) {
+			hiddenButtons(0);
+			isButtonsShow = false;
+		} else {
+			showButtons(0);
+			isButtonsShow = true;
+		}
+	}
+
+	/**
+	 * 隐藏按钮
+	 * 
+	 * @param duractions
+	 *            隐藏动画持续时间，如果为0表示不使用动画
+	 */
+	protected void hiddenButtons(int duractions) {
+		if (duractions == 0) {
+			for (int i = 1, count = floatLayout.getChildCount(); i < count; i++) {
+				View child = floatLayout.getChildAt(i);
+				child.setVisibility(View.GONE);
+			}
+		}
+	}
+
+	/**
+	 * 显示按钮
+	 * 
+	 * @param duractions
+	 *            显示动画持续时间，如果为0表示不使用动画
+	 */
+	protected void showButtons(int duractions) {
+		if (duractions == 0) {
+			for (int i = 1, count = floatLayout.getChildCount(); i < count; i++) {
+				View child = floatLayout.getChildAt(i);
+				child.setVisibility(View.VISIBLE);
+			}
 		}
 	}
 
@@ -295,6 +383,7 @@ public class SimulateKeyService extends Service {
 	protected void initEvent() {
 		btnMove = (Button) floatLayout.findViewById(R.id.btnMove);
 		btnMove.setOnTouchListener(moveListener);
+		btnMove.setOnClickListener(moveClickListener);
 
 		btnMenu = (Button) floatLayout.findViewById(R.id.btnMenu);
 		btnHome = (Button) floatLayout.findViewById(R.id.btnHome);

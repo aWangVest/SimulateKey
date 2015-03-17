@@ -1,9 +1,11 @@
 package tv.sanrenxing.awang.activity;
 
 import tv.sanrenxing.awang.simulatekey.R;
+import tv.sanrenxing.awang.simulatekey.SimulateKeyService;
 import tv.sanrenxing.awang.simulatekey.SimulateKeyWinOpt;
 import tv.sanrenxing.awang.utils.SimulateKeyUtils;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -40,7 +42,9 @@ public class MainActivity extends Activity {
 	 */
 	public void onClickTest(View v) {
 		Log.i(TAG, "onClickTest()");
-		SimulateKeyUtils.showMessage(getApplicationContext(), "暂未实现");
+		// SimulateKeyUtils.showMessage(getApplicationContext(), "暂未实现"); //
+		Intent intent = new Intent(this, SimulateKeyService.class);
+		startService(intent);
 	}
 
 	/**
