@@ -1,5 +1,6 @@
 package tv.sanrenxing.awang.activity;
 
+import tv.sanrenxing.awang.settings.SimulatePrefs;
 import tv.sanrenxing.awang.simulatekey.R;
 import tv.sanrenxing.awang.simulatekey.SimulateKeyService;
 import tv.sanrenxing.awang.simulatekey.SimulateKeyWinOpt;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 /**
  * @author aWang
@@ -16,12 +18,26 @@ import android.view.View;
  */
 public class MainActivity extends Activity {
 
-	private static final String TAG = "SimulateKey";
+	private static final String TAG = "SimulateKey-"
+			+ MainActivity.class.getSimpleName();
+
+	private SimulatePrefs prefs = null;
+	private Button btnSetBootTip = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.d(TAG, "onCreate()");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		prefs = SimulatePrefs.getInstance(this);
+		btnSetBootTip = (Button) findViewById(R.id.btnSetBootTip);
+		if (prefs.getBoolean(SimulatePrefs.B_IS_BOOTED_TIP, false)) {
+			btnSetBootTip.setText(R.string.btn_set_boot_tip_false);
+		} else {
+			btnSetBootTip.setText(R.string.btn_set_boot_tip_true);
+		}
+
 		SimulateKeyWinOpt.showFloatWindow(getApplicationContext());
 	}
 
@@ -107,5 +123,58 @@ public class MainActivity extends Activity {
 		Log.i(TAG, "onClickSetTextColor()");
 		// TODO : 实现取色盘 //
 		SimulateKeyUtils.showMessage(getApplicationContext(), "暂未实现");
+	}
+
+	/**
+	 * 设置开机提示
+	 * 
+	 * @param v
+	 */
+	public void onClickSetBootTip(View v) {
+		Log.i(TAG, "onClickSetBootTip()");
+		boolean isBootedTip = prefs.getBoolean(SimulatePrefs.B_IS_BOOTED_TIP,
+				false);
+		prefs.set(SimulatePrefs.B_IS_BOOTED_TIP, !isBootedTip);
+		if (isBootedTip) {
+			btnSetBootTip.setText(R.string.btn_set_boot_tip_true);
+		} else {
+			btnSetBootTip.setText(R.string.btn_set_boot_tip_false);
+		}
+	}
+
+	@Override
+	protected void onStart() {
+		Log.d(TAG, "onStart()");
+		super.onStart();
+	}
+
+	@Override
+	protected void onRestart() {
+		Log.d(TAG, "onRestart()");
+		super.onRestart();
+	}
+
+	@Override
+	protected void onResume() {
+		Log.d(TAG, "onResume()");
+		super.onResume();
+	}
+
+	@Override
+	protected void onPause() {
+		Log.d(TAG, "onPause()");
+		super.onPause();
+	}
+
+	@Override
+	protected void onStop() {
+		Log.d(TAG, "onStop()");
+		super.onStop();
+	}
+
+	@Override
+	protected void onDestroy() {
+		Log.d(TAG, "onDestroy()");
+		super.onDestroy();
 	}
 }

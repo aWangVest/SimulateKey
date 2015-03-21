@@ -15,5 +15,8 @@
     <string name="btn_set_text_color">设置文字颜色</string>
     <string name="btn_zh_show_float_window">显示悬浮窗</string>
     <string name="btn_zh_hidden_float_window">隐藏悬浮窗</string>
+    <string name="btn_set_boot_tip_false">开机不提示</string>
+    <string name="btn_set_boot_tip_true">开机提示</string>
+    <string name="boot_tip">SimulateKey已经启动</string>
 
 </resources>

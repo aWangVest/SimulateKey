@@ -2,6 +2,7 @@ package tv.sanrenxing.awang.simulatekey;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 /**
  * 模拟按键窗口操作类(其实可以改成AIDL的方式来和Service通讯，就不用这么多方法和步骤了)
@@ -10,6 +11,21 @@ import android.content.Intent;
  * @since 2015-3-11
  */
 public class SimulateKeyWinOpt {
+	
+	private static final String TAG = "SimulateKey-"
+			+ SimulateKeyWinOpt.class.getSimpleName();
+
+	/**
+	 * 激活Service，如果Service被杀之后可以很快复活
+	 * 
+	 * @param context
+	 */
+	public static void activateService(Context context) {
+		Log.d(TAG, "activateService()");
+		Intent intent = new Intent(context, SimulateKeyService.class);
+		// 激活不带参数 //
+		context.startService(intent);
+	}
 
 	/**
 	 * 显示悬浮窗
@@ -17,6 +33,7 @@ public class SimulateKeyWinOpt {
 	 * @param context
 	 */
 	public static void showFloatWindow(Context context) {
+		Log.d(TAG, "showFloatWindow()");
 		Intent intent = new Intent(context, SimulateKeyService.class);
 		// 第一次启动的时候，可以不带参数 //
 		intent.putExtra(SimulateKeyService.KEY_HAS_EXTRA, true);
@@ -31,6 +48,7 @@ public class SimulateKeyWinOpt {
 	 * @param context
 	 */
 	public static void hiddenFloatWindow(Context context) {
+		Log.d(TAG, "hiddenFloatWindow()");
 		Intent intent = new Intent(context, SimulateKeyService.class);
 		intent.putExtra(SimulateKeyService.KEY_HAS_EXTRA, true);
 		intent.putExtra(SimulateKeyService.KEY_DO_ACTION,
@@ -44,6 +62,7 @@ public class SimulateKeyWinOpt {
 	 * @param context
 	 */
 	public static void btnAddHeight(Context context) {
+		Log.d(TAG, "btnAddHeight()");
 		Intent intent = new Intent(context, SimulateKeyService.class);
 		intent.putExtra(SimulateKeyService.KEY_HAS_EXTRA, true);
 		intent.putExtra(SimulateKeyService.KEY_DO_ACTION,
@@ -57,6 +76,7 @@ public class SimulateKeyWinOpt {
 	 * @param context
 	 */
 	public static void btnMinusHeight(Context context) {
+		Log.d(TAG, "btnMinusHeight()");
 		Intent intent = new Intent(context, SimulateKeyService.class);
 		intent.putExtra(SimulateKeyService.KEY_HAS_EXTRA, true);
 		intent.putExtra(SimulateKeyService.KEY_DO_ACTION,

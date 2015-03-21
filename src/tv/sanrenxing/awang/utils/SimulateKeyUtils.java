@@ -16,12 +16,29 @@ public class SimulateKeyUtils {
 	 * 
 	 * @param context
 	 * @param msg
+	 *            消息字符串
 	 */
 	public static void showMessage(Context context, String msg) {
 		if (toast != null) {
 			toast.cancel();
 		}
 		toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+		toast.show();
+	}
+
+	/**
+	 * Toast消息
+	 * 
+	 * @param context
+	 * @param resId
+	 *            资源ID
+	 */
+	public static void showMessage(Context context, int resId) {
+		if (toast != null) {
+			toast.cancel();
+		}
+		toast = Toast.makeText(context, context.getString(resId),
+				Toast.LENGTH_SHORT);
 		toast.show();
 	}
 

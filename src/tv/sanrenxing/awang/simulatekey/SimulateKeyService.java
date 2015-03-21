@@ -1,5 +1,6 @@
 package tv.sanrenxing.awang.simulatekey;
 
+import tv.sanrenxing.awang.receiver.ScreenStateReceiver;
 import tv.sanrenxing.awang.settings.SimulatePrefs;
 import tv.sanrenxing.awang.utils.SimulateKeyUtils;
 import android.annotation.SuppressLint;
@@ -34,7 +35,8 @@ import android.widget.LinearLayout;
  */
 public class SimulateKeyService extends Service {
 
-	private static final String TAG = "SimulateKey";
+	private static final String TAG = "SimulateKey-"
+			+ SimulateKeyService.class.getSimpleName();
 
 	public static final String KEY_HAS_EXTRA = "hasExtra";
 	public static final String KEY_DO_ACTION = "doAction";
@@ -115,8 +117,13 @@ public class SimulateKeyService extends Service {
 			}
 			params.x = (int) event.getRawX() - floatLayout.getMeasuredWidth()
 					/ 2;
-			params.y = (int) event.getRawY() - btnMove.getMeasuredHeight() / 2;
+			params.y = (int) event.getRawY() - floatLayout.getMeasuredHeight()
+					/ 2;
 			wm.updateViewLayout(floatLayout, params);
+			if (event.getAction() == MotionEvent.ACTION_UP) {
+				prefs.set(SimulatePrefs.I_BTN_X_POS, params.x);
+				prefs.set(SimulatePrefs.I_BTN_Y_POS, params.y);
+			}
 			return false;
 		}
 	};
@@ -175,6 +182,8 @@ public class SimulateKeyService extends Service {
 		thread.start();
 		mServiceLooper = thread.getLooper();
 		mServiceHandler = new ServiceHandler(mServiceLooper);
+		// 注册屏幕开启和关闭事件 //
+		ScreenStateReceiver.register(getApplicationContext());
 	}
 
 	@Override
@@ -198,6 +207,8 @@ public class SimulateKeyService extends Service {
 	@Override
 	public void onDestroy() {
 		Log.i(TAG, "onDestroy()");
+		// 取消屏幕开机和关闭事件注册 //
+		ScreenStateReceiver.unregister(getApplicationContext());
 		super.onDestroy();
 	}
 
@@ -375,6 +386,9 @@ public class SimulateKeyService extends Service {
 		params.gravity = Gravity.LEFT | Gravity.TOP;
 		params.width = WindowManager.LayoutParams.WRAP_CONTENT;
 		params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+		// 记录上一次的坐标 //
+		params.x = prefs.getInt(SimulatePrefs.I_BTN_X_POS, 0);
+		params.y = prefs.getInt(SimulatePrefs.I_BTN_Y_POS, 0);
 	}
 
 	/**

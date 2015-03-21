@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,84 +8,73 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <Button
-        android:id="@+id/btnQuit"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:onClick="onClickQuit"
-        android:text="@string/btn_zh_quit" />
+        android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/btnTest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/btnQuit"
-        android:layout_below="@+id/btnQuit"
-        android:onClick="onClickTest"
-        android:text="@string/btn_zh_test" />
+        <Button
+            android:id="@+id/btnQuit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickQuit"
+            android:text="@string/btn_zh_quit" />
 
-    <Button
-        android:id="@+id/btnShowFlowWindow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/btnTest"
-        android:layout_below="@+id/btnTest"
-        android:onClick="onClickShowFlowWindow"
-        android:text="@string/btn_zh_show_float_window" />
+        <Button
+            android:id="@+id/btnTest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickTest"
+            android:text="@string/btn_zh_test" />
 
-    <Button
-        android:id="@+id/btnHiddenFlowWindow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/btnShowFlowWindow"
-        android:layout_below="@+id/btnShowFlowWindow"
-        android:onClick="onClickHiddenFlowWindow"
-        android:text="@string/btn_zh_hidden_float_window" />
+        <Button
+            android:id="@+id/btnShowFlowWindow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickShowFlowWindow"
+            android:text="@string/btn_zh_show_float_window" />
 
-    <Button
-        android:id="@+id/btnAddHeight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/btnHiddenFlowWindow"
-        android:layout_below="@+id/btnHiddenFlowWindow"
-        android:onClick="onClickAddHeight"
-        android:text="@string/btn_zh_add_height" />
+        <Button
+            android:id="@+id/btnHiddenFlowWindow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickHiddenFlowWindow"
+            android:text="@string/btn_zh_hidden_float_window" />
 
-    <Button
-        android:id="@+id/btnMinusHeight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/btnAddHeight"
-        android:layout_below="@+id/btnAddHeight"
-        android:onClick="onClickMinusHeight"
-        android:text="@string/btn_zh_minus_height" />
+        <Button
+            android:id="@+id/btnAddHeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickAddHeight"
+            android:text="@string/btn_zh_add_height" />
 
-    <Button
-        android:id="@+id/btnSetButtonBg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btnMinusHeight"
-        android:layout_alignRight="@+id/btnMinusHeight"
-        android:layout_below="@+id/btnMinusHeight"
-        android:onClick="onClickSetButtonBg"
-        android:text="@string/btn_set_button_bg" />
+        <Button
+            android:id="@+id/btnMinusHeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickMinusHeight"
+            android:text="@string/btn_zh_minus_height" />
 
-    <Button
-        android:id="@+id/btnSetTextColor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btnSetButtonBg"
-        android:layout_alignRight="@+id/btnSetButtonBg"
-        android:layout_below="@+id/btnSetButtonBg"
-        android:onClick="onClickSetTextColor"
-        android:text="@string/btn_set_text_color" />
+        <Button
+            android:id="@+id/btnSetButtonBg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickSetButtonBg"
+            android:text="@string/btn_set_button_bg" />
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/btnSetTextColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickSetTextColor"
+            android:text="@string/btn_set_text_color" />
+
+        <Button
+            android:id="@+id/btnSetBootTip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickSetBootTip"
+            android:text="@string/btn_set_boot_tip_false" />
+    </LinearLayout>
+
+</ScrollView>
